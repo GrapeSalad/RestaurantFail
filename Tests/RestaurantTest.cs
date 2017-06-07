@@ -1,0 +1,49 @@
+using System;
+using System.Collections.Generic;
+using Xunit;
+using System.Data;
+using System.Data.SqlClient;
+using Restaurants.Objects;
+
+namespace Restaurants
+{
+  public class RestaurantTest : IDisposable
+  {
+    public RestaurantTest()
+    {
+      DBConfiguration.ConnectionString = "Data Source=(localdb)\\mssqllocaldb;Initial Catalog=restaurants_test;Integrated Security=SSPI;";
+    }
+
+    [Fact]
+    public void Test_DatabaseEmptyAtFirst()
+    {
+      int result = Restaurant.GetAll().Count;
+      Assert.Equal(0, result);
+    }
+
+    [Fact]
+    public void Test_Equal_ReturnsTrueForSameName()
+    {
+      Restaurant firstRestaurant = new Restaurant("Chimmy Chonga", 4, 1);
+      Restaurant secondRestaurant = new Restaurant("Chimmy Chonga", 4, 1);
+      Assert.Equal(firstRestaurant, secondRestaurant);
+    }
+
+    [Fact]
+    public void Test_Save_ToRestaurantDatabase()
+    {
+      Restaurant testRestaurant = new Restaurant("Grandma's House", 5, 1);
+      testRestaurant.Save();
+
+      List<Restaurant> result = Restaurant.GetAll();
+      List<Restaurant> testList = new List<Restaurant>{testRestaurant};
+      Assert.Equal(testList, result);
+    }
+
+    public void Dispose()
+    {
+      Restaurant.DeleteAll();
+      Cuisine.DeleteAll();
+    }
+  }
+}
