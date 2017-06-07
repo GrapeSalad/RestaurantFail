@@ -1,0 +1,19 @@
+@{
+  Layout="Shared/_Layout.cshtml";
+}
+
+<h4>ENTER STUFF</h4>
+
+<form action="/restaurants/new" method="post">
+  <label for="restaurant-name">Restaurant Name</label>
+  <input id="restaurant-name" name="restaurant-name" type="text">
+  <label for="restaurant-rating">Restaurant rating</label>
+  <input id="restaurant-rating" name="restaurant-rating" type="text">
+  <select name="cuisine-id">
+    @foreach (var cuisine in Model)
+    {
+      <option value="@cuisine.GetId()">@cuisine.GetType()</option>
+    }
+  </select>
+  <button type="submit">Add</button>
+</form>

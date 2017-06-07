@@ -1,0 +1,21 @@
+@{
+  Layout="Shared/_Layout.cshtml";
+}
+
+<h4>ENTER STUFF</h4>
+
+<form action="/reviews/new" method="post">
+  <label for="review-UserName">Review User Name</label>
+  <input id="review-UserName" name="review-UserName" type="text">
+  <label for="review-score">Review score</label>
+  <input id="review-score" name="review-score" type="number">
+  <label for="review-comment">Review comment</label>
+  <input id="review-comment" name="review-comment" type="text">
+  <select name="restaurant-id">
+    @foreach (var restaurant in Model)
+    {
+      <option value="@restaurant.GetId()">@restaurant.GetName()</option>
+    }
+  </select>
+  <button type="submit">Add</button>
+</form>
