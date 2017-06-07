@@ -99,12 +99,15 @@ namespace Restaurants.Objects
       SqlParameter nameParameter = new SqlParameter();
       nameParameter.ParameterName = "@RestaurantName";
       nameParameter.Value = this.GetName();
+
       SqlParameter ratingParameter = new SqlParameter();
       ratingParameter.ParameterName = "@RestaurantRating";
       ratingParameter.Value = this.GetRating();
+
       SqlParameter cuisineIdParameter = new SqlParameter();
       cuisineIdParameter.ParameterName = "@CuisineId";
       cuisineIdParameter.Value = this.GetCuisineId();
+
       cmd.Parameters.Add(nameParameter);
       cmd.Parameters.Add(ratingParameter);
       cmd.Parameters.Add(cuisineIdParameter);
