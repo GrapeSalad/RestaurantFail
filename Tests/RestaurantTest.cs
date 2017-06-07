@@ -40,10 +40,22 @@ namespace Restaurants
       Assert.Equal(testList, result);
     }
 
+    [Fact]
+    public void Test_FindRestaurantInDatabase()
+    {
+      Restaurant testRestaurant = new Restaurant("j", 3, 1);
+      testRestaurant.Save();
+
+      Restaurant foundRestaurant = Restaurant.Find(testRestaurant.GetId());
+
+      Assert.Equal(testRestaurant, foundRestaurant);
+    }
+
     public void Dispose()
     {
       Restaurant.DeleteAll();
       Cuisine.DeleteAll();
+      Review.DeleteAll();
     }
   }
 }
