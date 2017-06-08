@@ -7,6 +7,7 @@ using Restaurants.Objects;
 
 namespace Restaurants
 {
+  [Collection("Restaurants")]
   public class CuisineTest : IDisposable
   {
     public CuisineTest()
@@ -78,7 +79,7 @@ namespace Restaurants
       string newType = "I dont know";
 
       //Act
-      testCuisine.Update(newType);
+      testCuisine.UpdateType(newType);
 
       string result = testCuisine.GetType();
 

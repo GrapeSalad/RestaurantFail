@@ -1,0 +1,24 @@
+@{
+  Layout="Shared/_Layout.cshtml";
+}
+
+<h2>@Model["cuisine"].GetType() Restaurants</h2>
+<p>@Model["cuisine"].GetDescription()</p>
+
+<h3>Restaurants in this category</h3>
+@if (Model["restaurants"].Count == 0)
+{
+  <p>AINT NO RESTAURANTS HERE</p>
+}
+else
+{
+  <ul>
+  @foreach (var restaurant in @Model["restaurants"])
+  {
+    <li><a href="/restaurants/@restaurant.GetId()">@restaurant.GetName()</a></li>
+  }
+  </ul>
+}
+<h4><a href ='/cuisines/@Model["cuisine"].GetId()/edit'>Edit this cuisine!</a></h4>
+<h4><a href ="/cuisines/new">Add a new cuisine!</a></h4>
+<h4><a href="/">Return home</a></h4>

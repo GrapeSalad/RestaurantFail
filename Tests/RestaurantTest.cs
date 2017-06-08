@@ -7,6 +7,7 @@ using Restaurants.Objects;
 
 namespace Restaurants
 {
+  [Collection("Restaurants")]
   public class RestaurantTest : IDisposable
   {
     public RestaurantTest()

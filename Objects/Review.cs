@@ -84,10 +84,10 @@ namespace Restaurants.Objects
       while(rdr.Read())
       {
         int reviewId = rdr.GetInt32(0);
-        int reviewScore = rdr.GetInt32(1);
-        string reviewComment = rdr.GetString(2);
-        int restaurantId = rdr.GetInt32(3);
-        string reviewUserName = rdr.GetString(4);
+        string reviewUserName = rdr.GetString(1);
+        int reviewScore = rdr.GetInt32(2);
+        string reviewComment = rdr.GetString(3);
+        int restaurantId = rdr.GetInt32(4);
         Review newReview = new Review(reviewUserName, reviewScore, reviewComment, restaurantId, reviewId);
         allReviews.Add(newReview);
       }
@@ -107,7 +107,7 @@ namespace Restaurants.Objects
       SqlConnection conn = DB.Connection();
       conn.Open();
 
-      SqlCommand cmd = new SqlCommand("INSERT INTO reviews (score, comment, restaurant_id, username) OUTPUT INSERTED.id VALUES (@ReviewScore, @ReviewComment, @RestaurantId, @ReviewUserName);", conn);
+      SqlCommand cmd = new SqlCommand("INSERT INTO reviews (username, score, comment, restaurant_id) OUTPUT INSERTED.id VALUES (@ReviewUserName, @ReviewScore, @ReviewComment, @RestaurantId);", conn);
 
       SqlParameter scoreParameter = new SqlParameter();
       scoreParameter.ParameterName = "@ReviewScore";
@@ -165,10 +165,10 @@ namespace Restaurants.Objects
       while(rdr.Read())
       {
         foundReviewId = rdr.GetInt32(0);
-        foundReviewScore = rdr.GetInt32(1);
-        foundReviewComment = rdr.GetString(2);
-        foundRestaurantId = rdr.GetInt32(3);
-        foundReviewUserName = rdr.GetString(4);
+        foundReviewUserName = rdr.GetString(1);
+        foundReviewScore = rdr.GetInt32(2);
+        foundReviewComment = rdr.GetString(3);
+        foundRestaurantId = rdr.GetInt32(4);
       }
 
       Review foundReview = new Review(foundReviewUserName, foundReviewScore, foundReviewComment, foundRestaurantId, foundReviewId);
@@ -182,6 +182,36 @@ namespace Restaurants.Objects
         conn.Close();
       }
       return foundReview;
+    }
+
+    public static int GetRestaurantAverage(int restaurantId)
+    {
+      int foundReviewAvg = 0;
+      Console.WriteLine("Avg First " + foundReviewAvg);
+      SqlConnection conn = DB.Connection();
+      conn.Open();
+
+      SqlCommand cmd = new SqlCommand("SELECT Avg(score) FROM reviews WHERE restaurant_Id = @RestaurantId", conn);
+      SqlParameter restaurantIdParameter = new SqlParameter();
+      restaurantIdParameter.ParameterName = "@RestaurantId";
+      restaurantIdParameter.Value = restaurantId.ToString();
+      cmd.Parameters.Add(restaurantIdParameter);
+      SqlDataReader rdr = cmd.ExecuteReader();
+
+      while(rdr.Read())
+      {
+        foundReviewAvg = rdr.GetInt32(0);
+      }
+      Console.WriteLine("Avg After " + foundReviewAvg);
+      if(rdr != null)
+      {
+        rdr.Close();
+      }
+      if(conn != null)
+      {
+        conn.Close();
+      }
+      return foundReviewAvg;
     }
 
     public static void DeleteAll()

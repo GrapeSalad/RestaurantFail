@@ -1,0 +1,32 @@
+@{
+  Layout="Shared/_Layout.cshtml";
+}
+
+<h3>@Model["restaurant"].GetName()</h3>
+
+<p>Average Rating: @Model["average"]</p>
+
+<h4>REVIEWS:</h4>
+@if (Model["reviews"].Count == 0)
+{
+  <p>AINT NO REVIEWS</p>
+}
+else{
+  <ul>
+    @foreach (var review in @Model["reviews"])
+    {
+      <li><strong>@review.GetUserName() said:</strong>
+        <br>
+        "@review.GetComment()"
+        <br>
+        rating: @review.GetScore()
+      </li>
+    }
+  </ul>
+}
+
+<h4><a href ="/restaurants/@Model["restaurant"].GetId()/delete">Delete this restaurant!</a></h4>
+
+<h4><a href ="/restaurants/new">Add a new restaurant!</a></h4>
+<h4><a href ="/restaurants/new_review">Add a review!</a></h4>
+<h4><a href="/">Return home</a></h4>

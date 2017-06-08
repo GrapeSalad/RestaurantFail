@@ -1,0 +1,38 @@
+body {
+  background: url("../img/mainBg.png") no-repeat center center fixed;
+  background-size: 100% 100%;
+  font-family: 'Josefin Sans', sans-serif;
+}
+
+.container {
+  margin-top: 200px;
+  background: rgba(233, 231, 218, .8);
+  height: 700px;
+  border: 2px solid #945D60;
+  border-radius: 50px;
+}
+
+h1 {
+  border: 1px solid #494A43;
+  border-radius: 10px;
+  text-align: center;
+  margin: 10px auto;
+  width: 250px;
+}
+
+img {
+  float: right;
+  position: relative;
+}
+
+.flashy {
+  animation-name: flashy;
+  animation-duration: 1s;
+  animation-iteration-count: infinite;
+}
+
+@keyframes flashy {
+  0% {color: #E9E7DA};
+  50% {color: #3C3C3C};
+  100% {color: #E9E7DA};
+}
