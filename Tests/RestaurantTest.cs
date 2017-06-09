@@ -25,15 +25,15 @@ namespace Restaurants
     [Fact]
     public void Test_Equal_ReturnsTrueForSameName()
     {
-      Restaurant firstRestaurant = new Restaurant("Chimmy Chonga", 4, 1);
-      Restaurant secondRestaurant = new Restaurant("Chimmy Chonga", 4, 1);
+      Restaurant firstRestaurant = new Restaurant("Chimmy Chonga", "Portland", 1);
+      Restaurant secondRestaurant = new Restaurant("Chimmy Chonga", "Portland", 1);
       Assert.Equal(firstRestaurant, secondRestaurant);
     }
 
     [Fact]
     public void Test_Save_ToRestaurantDatabase()
     {
-      Restaurant testRestaurant = new Restaurant("Grandma's House", 5, 1);
+      Restaurant testRestaurant = new Restaurant("Grandma's House", "Vancouver", 1);
       testRestaurant.Save();
 
       List<Restaurant> result = Restaurant.GetAll();
@@ -44,7 +44,7 @@ namespace Restaurants
     [Fact]
     public void Test_FindRestaurantInDatabase()
     {
-      Restaurant testRestaurant = new Restaurant("j", 3, 1);
+      Restaurant testRestaurant = new Restaurant("j", "3", 1);
       testRestaurant.Save();
 
       Restaurant foundRestaurant = Restaurant.Find(testRestaurant.GetId());

@@ -187,7 +187,6 @@ namespace Restaurants.Objects
     public static int GetRestaurantAverage(int restaurantId)
     {
       int foundReviewAvg = 0;
-      Console.WriteLine("Avg First " + foundReviewAvg);
       SqlConnection conn = DB.Connection();
       conn.Open();
 
@@ -202,7 +201,6 @@ namespace Restaurants.Objects
       {
         foundReviewAvg = rdr.GetInt32(0);
       }
-      Console.WriteLine("Avg After " + foundReviewAvg);
       if(rdr != null)
       {
         rdr.Close();

@@ -1,0 +1,11 @@
+@{
+  Layout="Shared/_Layout.cshtml";
+}
+<h3>Log In To Edit this Restaurant</h3>
+<form action="/restaurants/@Model["restaurant"].GetId()/login/edit" method="post">
+  <label for="user-name"></label>
+  <input id="user-name" name="user-name" type="text" placeholder="User Login">
+  <label for="user-password"></label>
+  <input id="user-password" name="user-password" type="password" placeholder="Password">
+  <button type="submit">Submit</button>
+</form>

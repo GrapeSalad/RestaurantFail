@@ -34,7 +34,7 @@ namespace Restaurants
         return View["restaurant_add.cshtml", allCuisines];
       };
       Post["/restaurants/new"] = _ => {
-        Restaurant newRestaurant = new Restaurant(Request.Form["restaurant-name"], Request.Form["restaurant-rating"], Request.Form["cuisine-id"]);
+        Restaurant newRestaurant = new Restaurant(Request.Form["restaurant-name"], Request.Form["restaurant-location"], Request.Form["cuisine-id"]);
         newRestaurant.Save();
         return View["success.cshtml"];
       };
@@ -55,6 +55,12 @@ namespace Restaurants
         model.Add("restaurants", cuisineRestaurants);
         return View["cuisine.cshtml", model];
       };
+      Get["cuisines/{id}/edit"] = parameters => {
+        Dictionary<string, object> model = new Dictionary<string, object>();
+        Cuisine selectedCuisine = Cuisine.Find(parameters.id);
+        model.Add("selectedCuisine", selectedCuisine);
+        return View["cuisine_edit.cshtml", model];
+      };
       Get["/restaurants/{id}"] = parameters => {
         Dictionary<string, object> model = new Dictionary<string, object>();
         var selectedRestaurant = Restaurant.Find(parameters.id);
@@ -65,32 +71,69 @@ namespace Restaurants
         model.Add("average", restaurantAvgReviews);
         return View["restaurant.cshtml", model];
       };
-      Get["cuisines/{id}/edit"] = parameters => {
+      Get["restaurants/{id}/login"] = parameters => {
         Dictionary<string, object> model = new Dictionary<string, object>();
-        Cuisine selectedCuisine = Cuisine.Find(parameters.id);
-        model.Add("selectedCuisine", selectedCuisine);
-        return View["cuisine_edit.cshtml", model];
+        var selectedRestaurant = Restaurant.Find(parameters.id);
+        model.Add("restaurant", selectedRestaurant);
+        return View["login.cshtml", model];
       };
-      Patch["/cuisines/{id}/edit"] = parameters => {
-        Cuisine selectedCuisine = Cuisine.Find(parameters.id);
-        string newType = Request.Form["cuisine-type"];
-        string newDescription = Request.Form["cuisine-description"];
-        if (newType == "" && newDescription != "")
+      Post["restaurants/{id}/login/edit"] = _ => {
+        Admin adminTest = new Admin(Request.Form["user-name"], Request.Form["user-password"]);
+        bool isAdmin = adminTest.CheckPassword();
+        if (isAdmin)
         {
-          selectedCuisine.UpdateDescription(newDescription);
+          Admin.SetStatus(true);
+          return View["restaurant_edit.cshtml"];
         }
-        else if (newType != "" && newDescription == "")
+        return View["restaurant_edit.cshtml"];
+      };
+      // Patch["/cuisines/{id}/edit"] = parameters => {
+      //   Cuisine selectedCuisine = Cuisine.Find(parameters.id);
+      //   string newType = Request.Form["cuisine-type"];
+      //   string newDescription = Request.Form["cuisine-description"];
+      //   if (newType == "" && newDescription != "")
+      //   {
+      //     selectedCuisine.UpdateDescription(newDescription);
+      //   }
+      //   else if (newType != "" && newDescription == "")
+      //   {
+      //     selectedCuisine.UpdateType(newType);
+      //   }
+      //   else
+      //   {
+      //     selectedCuisine.UpdateDescription(newDescription);
+      //     selectedCuisine.UpdateType(newType);
+      //   }
+      //   return View["success.cshtml"];
+      // };
+      Patch["/restaurants/{id}/edit"] = parameters => {
+        Restaurant selectedRestaurant = Restaurant.Find(parameters.id);
+        string newName = Request.Form["restaurant-name"];
+        string newLocation = Request.Form["restaurant-location"];
+        if (newName == "" && newLocation != "")
         {
-          selectedCuisine.UpdateType(newType);
+          selectedRestaurant.UpdateLocation(newLocation);
+        }
+        else if (newName != "" && newLocation == "")
+        {
+          selectedRestaurant.UpdateName(newName);
         }
         else
         {
-          selectedCuisine.UpdateDescription(newDescription);
-          selectedCuisine.UpdateType(newType);
+          selectedRestaurant.UpdateLocation(newLocation);
+          selectedRestaurant.UpdateName(newName);
         }
         return View["success.cshtml"];
       };
-      Get["restaurants/{id}/delete"] = parameters => {
+
+      Get["restaurants/{id}/login/edit"] = parameters => {
+        Dictionary<string, object> model = new Dictionary<string, object>();
+        Restaurant selectedRestaurant = Restaurant.Find(parameters.id);
+        model.Add("restaurant", selectedRestaurant);
+        // model.Add("access", Admin.GetStatus());
+        return View["restaurant_edit.cshtml", model];
+      };
+      Get["restaurants/{id}/login/delete"] = parameters => {
         Restaurant selectedRestaurant = Restaurant.Find(parameters.id);
         return View["restaurant_delete.cshtml", selectedRestaurant];
       };

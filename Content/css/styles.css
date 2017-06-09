@@ -6,7 +6,7 @@ body {
 
 .container {
   margin-top: 200px;
-  background: rgba(233, 231, 218, .8);
+  background: rgba(233, 231, 218, .4);
   height: 700px;
   border: 2px solid #945D60;
   border-radius: 50px;
@@ -35,4 +35,12 @@ img {
   0% {color: #E9E7DA};
   50% {color: #3C3C3C};
   100% {color: #E9E7DA};
+}
+
+a {
+  color: #AF473C;
+}
+
+a:hover {
+  color: #626E60;
 }

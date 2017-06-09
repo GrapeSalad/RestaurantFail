@@ -168,9 +168,9 @@ namespace Restaurants.Objects
       {
         int restaurantId = rdr.GetInt32(0);
         string restaurantName = rdr.GetString(1);
-        int restaurantRating = rdr.GetInt32(2);
+        string restaurantLocation = rdr.GetString(2);
         int cuisineId = rdr.GetInt32(3);
-        Restaurant newRestaurant = new Restaurant(restaurantName, restaurantRating, cuisineId, restaurantId);
+        Restaurant newRestaurant = new Restaurant(restaurantName, restaurantLocation, cuisineId, restaurantId);
         restaurants.Add(newRestaurant);
       }
       if (rdr != null)

@@ -57,9 +57,9 @@ namespace Restaurants
       Cuisine testCuisine = new Cuisine("Moroccan", "Rasins and nuts and shit oh and tumeric");
       testCuisine.Save();
 
-      Restaurant firstRestaurant = new Restaurant("Lemur", 5, testCuisine.GetId());
+      Restaurant firstRestaurant = new Restaurant("Lemur", "a location", testCuisine.GetId());
       firstRestaurant.Save();
-      Restaurant secondRestaurant = new Restaurant("Aye-Aye", 4, testCuisine.GetId());
+      Restaurant secondRestaurant = new Restaurant("Aye-Aye", "another location", testCuisine.GetId());
       secondRestaurant.Save();
 
       List<Restaurant> testRestaurantList = new List<Restaurant> {firstRestaurant, secondRestaurant};
@@ -101,9 +101,9 @@ namespace Restaurants
       Cuisine testCuisine2 = new Cuisine(type2, description2);
       testCuisine2.Save();
 
-      Restaurant testRestaurant1 = new Restaurant("Le Gummy Bears", 5, testCuisine1.GetId());
+      Restaurant testRestaurant1 = new Restaurant("Le Gummy Bears", "location1", testCuisine1.GetId());
       testRestaurant1.Save();
-      Restaurant testRestaurant2 = new Restaurant("Nein Germans", 2, testCuisine2.GetId());
+      Restaurant testRestaurant2 = new Restaurant("Nein Germans", "location2", testCuisine2.GetId());
       testRestaurant2.Save();
 
       //Act

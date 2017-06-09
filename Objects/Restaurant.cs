@@ -9,14 +9,14 @@ namespace Restaurants.Objects
   {
     private int _id;
     private string _name;
-    private int _rating;
+    private string _location;
     private int _cuisine_id;
 
-    public Restaurant(string Name, int Rating, int Cuisine_Id, int Id = 0)
+    public Restaurant(string Name, string Location, int Cuisine_Id, int Id = 0)
     {
       _id = Id;
       _name = Name;
-      _rating = Rating;
+      _location = Location;
       _cuisine_id = Cuisine_Id;
     }
     public override bool Equals(System.Object otherRestaurant)
@@ -29,9 +29,9 @@ namespace Restaurants.Objects
       {
         Restaurant newRestaurant = (Restaurant) otherRestaurant;
         bool nameEquality = (this.GetName() == newRestaurant.GetName());
-        bool ratingEquality = (this.GetRating() == newRestaurant.GetRating());
+        bool locationEquality = (this.GetLocation() == newRestaurant.GetLocation());
         bool cuisineIdEquality = (this.GetCuisineId() == newRestaurant.GetCuisineId());
-        return (nameEquality && ratingEquality && cuisineIdEquality);
+        return (nameEquality && locationEquality && cuisineIdEquality);
       }
     }
     public int GetId()
@@ -50,13 +50,13 @@ namespace Restaurants.Objects
     {
       _name = newName;
     }
-    public int GetRating()
+    public string GetLocation()
     {
-      return _rating;
+      return _location;
     }
-    public void SetRating(int newRating)
+    public void SetLocation(string newLocation)
     {
-      _rating = newRating;
+      _location = newLocation;
     }
 
     public static List<Restaurant> GetAll()
@@ -73,9 +73,9 @@ namespace Restaurants.Objects
       {
         int restaurantId = rdr.GetInt32(0);
         string restaurantName = rdr.GetString(1);
-        int restaurantRating = rdr.GetInt32(2);
+        string restaurantLocation = rdr.GetString(2);
         int cuisineId = rdr.GetInt32(3);
-        Restaurant newRestaurant = new Restaurant(restaurantName, restaurantRating, cuisineId, restaurantId);
+        Restaurant newRestaurant = new Restaurant(restaurantName, restaurantLocation, cuisineId, restaurantId);
         allRestaurants.Add(newRestaurant);
       }
       if (rdr != null)
@@ -94,22 +94,22 @@ namespace Restaurants.Objects
       SqlConnection conn = DB.Connection();
       conn.Open();
 
-      SqlCommand cmd = new SqlCommand("INSERT INTO restaurants (name, rating, cuisine_id) OUTPUT INSERTED.id VALUES (@RestaurantName, @RestaurantRating, @CuisineId)", conn);
+      SqlCommand cmd = new SqlCommand("INSERT INTO restaurants (name, location, cuisine_id) OUTPUT INSERTED.id VALUES (@RestaurantName, @RestaurantLocation, @CuisineId)", conn);
 
       SqlParameter nameParameter = new SqlParameter();
       nameParameter.ParameterName = "@RestaurantName";
       nameParameter.Value = this.GetName();
 
-      SqlParameter ratingParameter = new SqlParameter();
-      ratingParameter.ParameterName = "@RestaurantRating";
-      ratingParameter.Value = this.GetRating();
+      SqlParameter locationParameter = new SqlParameter();
+      locationParameter.ParameterName = "@RestaurantLocation";
+      locationParameter.Value = this.GetLocation();
 
       SqlParameter cuisineIdParameter = new SqlParameter();
       cuisineIdParameter.ParameterName = "@CuisineId";
       cuisineIdParameter.Value = this.GetCuisineId();
 
       cmd.Parameters.Add(nameParameter);
-      cmd.Parameters.Add(ratingParameter);
+      cmd.Parameters.Add(locationParameter);
       cmd.Parameters.Add(cuisineIdParameter);
       SqlDataReader rdr = cmd.ExecuteReader();
 
@@ -140,18 +140,18 @@ namespace Restaurants.Objects
 
       int foundRestaurantId = 0;
       string foundRestaurantName = null;
-      int foundRestaurantRating = 0;
+      string foundRestaurantLocation = null;
       int foundCuisineId = 0;
 
       while(rdr.Read())
       {
         foundRestaurantId = rdr.GetInt32(0);
         foundRestaurantName = rdr.GetString(1);
-        foundRestaurantRating = rdr.GetInt32(2);
+        foundRestaurantLocation = rdr.GetString(2);
         foundCuisineId = rdr.GetInt32(3);
       }
 
-      Restaurant foundRestaurant = new Restaurant(foundRestaurantName, foundRestaurantRating, foundCuisineId, foundRestaurantId);
+      Restaurant foundRestaurant = new Restaurant(foundRestaurantName, foundRestaurantLocation, foundCuisineId, foundRestaurantId);
 
       if(rdr != null)
       {
@@ -197,6 +197,71 @@ namespace Restaurants.Objects
         conn.Close();
       }
       return reviews;
+    }
+
+    public void UpdateName(string newName)
+    {
+      SqlConnection conn = DB.Connection();
+      conn.Open();
+      SqlCommand cmd = new SqlCommand("UPDATE cuisines SET type = @NewName OUTPUT INSERTED.type WHERE id = @CuisineId;", conn);
+
+      SqlParameter newNameParameter = new SqlParameter();
+      newNameParameter.ParameterName = "@NewName";
+      newNameParameter.Value = newName;
+      cmd.Parameters.Add(newNameParameter);
+
+      SqlParameter cuisineIdParameter = new SqlParameter();
+      cuisineIdParameter.ParameterName = "@CuisineId";
+      cuisineIdParameter.Value = this.GetId();
+      cmd.Parameters.Add(cuisineIdParameter);
+
+      SqlDataReader rdr = cmd.ExecuteReader();
+      while(rdr.Read())
+      {
+        this._name = rdr.GetString(0);
+      }
+
+      if (rdr != null)
+      {
+        rdr.Close();
+      }
+
+      if (conn != null)
+      {
+        conn.Close();
+      }
+    }
+    public void UpdateLocation(string newLocation)
+    {
+      SqlConnection conn = DB.Connection();
+      conn.Open();
+      SqlCommand cmd = new SqlCommand("UPDATE cuisines SET location = @NewLocation OUTPUT INSERTED.description WHERE id = @RestaurantId;", conn);
+
+      SqlParameter newLocationParameter = new SqlParameter();
+      newLocationParameter.ParameterName = "@NewLocation";
+      newLocationParameter.Value = newLocation;
+      cmd.Parameters.Add(newLocationParameter);
+
+      SqlParameter restaurantIdParameter = new SqlParameter();
+      restaurantIdParameter.ParameterName = "@RestaurantId";
+      restaurantIdParameter.Value = this.GetId();
+      cmd.Parameters.Add(restaurantIdParameter);
+
+      SqlDataReader rdr = cmd.ExecuteReader();
+      while(rdr.Read())
+      {
+        this._name = rdr.GetString(0);
+      }
+
+      if (rdr != null)
+      {
+        rdr.Close();
+      }
+
+      if (conn != null)
+      {
+        conn.Close();
+      }
     }
 
     public void Delete()
